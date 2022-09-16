@@ -94,7 +94,7 @@ class PriceServiceImplTest {
         //then
         assertTrue(priceDtoOptional.isPresent());
         assertEquals(priceDtoOptional.get().getPrice(), price);
-        then(priceDao).should().findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
+        then(priceDao).should(times(1)).findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
         then(priceDao).shouldHaveNoMoreInteractions();
     }
 
