@@ -5,13 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * API test project with H2
+ *
  * @author victor.martingil
  */
 @SpringBootApplication
+//@EnableSwagger2
 public class PricesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PricesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PricesApplication.class, args);
+    }
 
 }
