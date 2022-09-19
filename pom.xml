@@ -49,6 +49,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--ACTUATOR-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+
         <!--OPEN API SPRING DOC-->
         <dependency>
             <groupId>org.springdoc</groupId>
