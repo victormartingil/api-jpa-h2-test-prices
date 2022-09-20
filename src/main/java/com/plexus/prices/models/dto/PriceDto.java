@@ -24,6 +24,7 @@ public class PriceDto {
     private Long id;
     private int productId;
     private int brandId;
+    @Schema(name= "priceList", required = true, description = "Price list identification")
     private int priceList;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH.mm.ss")
     private LocalDateTime startDate;
