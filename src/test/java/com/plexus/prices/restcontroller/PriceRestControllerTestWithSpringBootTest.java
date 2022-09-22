@@ -1,7 +1,9 @@
 package com.plexus.prices.restcontroller;
 
-import com.plexus.prices.models.dto.PriceDto;
-import com.plexus.prices.models.dto.PriceQuery;
+import com.plexus.prices.mapper.PriceMapper;
+import com.plexus.prices.mapper.PriceMapperImpl;
+import com.plexus.prices.models.dto.PriceRequestDto;
+import com.plexus.prices.models.dto.PriceResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  **/
 @SpringBootTest
 @AutoConfigureMockMvc
-class PriceRestControllerTest {
+class PriceRestControllerTestWithSpringBootTest {
 
     @Autowired
     MockMvc mockMvc;
 
-    PriceQuery priceQuery1;
-    PriceQuery priceQuery2;
-    PriceQuery priceQuery3;
-    PriceQuery priceQuery4;
-    PriceQuery priceQuery5;
-    PriceDto priceDto;
+    PriceRequestDto priceRequestDto1;
+    PriceRequestDto priceRequestDto2;
+    PriceRequestDto priceRequestDto3;
+    PriceRequestDto priceRequestDto4;
+    PriceRequestDto priceRequestDto5;
+    PriceResponseDto priceResponseDto;
 
     private static final String GET_PRICES_URL = "/api/prices";
 
@@ -40,27 +42,27 @@ class PriceRestControllerTest {
 
     @BeforeEach
     void setUp() {
-        priceQuery1 = PriceQuery.builder()
+        priceRequestDto1 = PriceRequestDto.builder()
                 .date(LocalDateTime.of(2020, 6, 14, 10, 0, 0))
                 .productId(35455)
                 .brandId(1).build();
-        priceQuery2 = PriceQuery.builder()
+        priceRequestDto2 = PriceRequestDto.builder()
                 .date(LocalDateTime.of(2020, 6, 14, 16, 0, 0))
                 .productId(35455)
                 .brandId(1).build();
-        priceQuery3 = PriceQuery.builder()
+        priceRequestDto3 = PriceRequestDto.builder()
                 .date(LocalDateTime.of(2020, 6, 14, 21, 0, 0))
                 .productId(35455)
                 .brandId(1).build();
-        priceQuery4 = PriceQuery.builder()
+        priceRequestDto4 = PriceRequestDto.builder()
                 .date(LocalDateTime.of(2020, 6, 15, 10, 0, 0))
                 .productId(35455)
                 .brandId(1).build();
-        priceQuery5 = PriceQuery.builder()
+        priceRequestDto5 = PriceRequestDto.builder()
                 .date(LocalDateTime.of(2020, 6, 16, 21, 0, 0))
                 .productId(35455)
                 .brandId(1).build();
-        priceDto = PriceDto.builder()
+        priceResponseDto = PriceResponseDto.builder()
                 .id(1L)
                 .productId(1)
                 .brandId(1)
@@ -73,31 +75,31 @@ class PriceRestControllerTest {
     @Test
     void getPriceTests() throws Exception {
         // Test1 -> should find priceList = 1
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery1.getDate().format(dtf)).queryParam("productId", String.valueOf(priceQuery1.getProductId())).queryParam("brandId", String.valueOf(priceQuery1.getBrandId())))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto1.getDate().format(dtf)).queryParam("productId", String.valueOf(priceRequestDto1.getProductId())).queryParam("brandId", String.valueOf(priceRequestDto1.getBrandId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.priceList", is(1)));
 
         // Test2 -> should find priceList = 2
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery2.getDate().format(dtf)).queryParam("productId", String.valueOf(priceQuery2.getProductId())).queryParam("brandId", String.valueOf(priceQuery2.getBrandId())))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto2.getDate().format(dtf)).queryParam("productId", String.valueOf(priceRequestDto2.getProductId())).queryParam("brandId", String.valueOf(priceRequestDto2.getBrandId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.priceList", is(2)));
 
         // Test3 -> should find priceList = 1
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery3.getDate().format(dtf)).queryParam("productId", String.valueOf(priceQuery3.getProductId())).queryParam("brandId", String.valueOf(priceQuery3.getBrandId())))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto3.getDate().format(dtf)).queryParam("productId", String.valueOf(priceRequestDto3.getProductId())).queryParam("brandId", String.valueOf(priceRequestDto3.getBrandId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.priceList", is(1)));
 
         // Test4 -> should find priceList = 3
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery4.getDate().format(dtf)).queryParam("productId", String.valueOf(priceQuery4.getProductId())).queryParam("brandId", String.valueOf(priceQuery4.getBrandId())))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto4.getDate().format(dtf)).queryParam("productId", String.valueOf(priceRequestDto4.getProductId())).queryParam("brandId", String.valueOf(priceRequestDto4.getBrandId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.priceList", is(3)));
 
         // Test5 -> should find priceList = 4
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery5.getDate().format(dtf)).queryParam("productId", String.valueOf(priceQuery5.getProductId())).queryParam("brandId", String.valueOf(priceQuery5.getBrandId())))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto5.getDate().format(dtf)).queryParam("productId", String.valueOf(priceRequestDto5.getProductId())).queryParam("brandId", String.valueOf(priceRequestDto5.getBrandId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.priceList", is(4)));
@@ -105,7 +107,7 @@ class PriceRestControllerTest {
 
     @Test
     void getPriceTestNotOk() throws Exception {
-        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceQuery1.getDate().format(dtf)).queryParam("productId", String.valueOf(0)).queryParam("brandId", String.valueOf(0)))
+        mockMvc.perform(get(GET_PRICES_URL).contentType(MediaType.APPLICATION_JSON).queryParam("date", priceRequestDto1.getDate().format(dtf)).queryParam("productId", String.valueOf(0)).queryParam("brandId", String.valueOf(0)))
                 .andExpect(status().isNotFound());
     }
 }

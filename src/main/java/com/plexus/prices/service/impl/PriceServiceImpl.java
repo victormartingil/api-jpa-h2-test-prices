@@ -1,8 +1,8 @@
 package com.plexus.prices.service.impl;
 
-import com.plexus.prices.converter.PriceConverter;
-import com.plexus.prices.models.dao.PriceDao;
-import com.plexus.prices.models.dto.PriceDto;
+import com.plexus.prices.mapper.PriceMapper;
+import com.plexus.prices.models.repository.PriceRepository;
+import com.plexus.prices.models.dto.PriceResponseDto;
 import com.plexus.prices.models.entity.PriceEntity;
 import com.plexus.prices.service.PriceService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +23,14 @@ import java.util.Optional;
 @Slf4j
 public class PriceServiceImpl implements PriceService {
 
-    private PriceDao priceDao;
-    private PriceConverter priceConverter;
+    private PriceRepository priceRepository;
+    private PriceMapper priceMapper;
 
     @Autowired
-    public PriceServiceImpl(PriceDao priceDao,
-                            PriceConverter priceConverter) {
-        this.priceDao = priceDao;
-        this.priceConverter = priceConverter;
+    public PriceServiceImpl(PriceRepository priceRepository,
+                            PriceMapper priceMapper) {
+        this.priceRepository = priceRepository;
+        this.priceMapper = priceMapper;
     }
 
     /**
@@ -42,15 +42,15 @@ public class PriceServiceImpl implements PriceService {
      * @return Optional of PriceDto
      */
     @Override
-    public Optional<PriceDto> getPrice(LocalDateTime date, Integer productId, Integer brandId) {
-        List<PriceEntity> priceEntityList = priceDao.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, date, date);
+    public Optional<PriceResponseDto> getPrice(LocalDateTime date, Integer productId, Integer brandId) {
+        List<PriceEntity> priceEntityList = priceRepository.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, date, date);
         if (priceEntityList.isEmpty()) return Optional.empty();
 
         PriceEntity priceEntity = priceEntityList.stream().max(Comparator.comparing(PriceEntity::getPriority)).orElse(null);
 
-        PriceDto priceDto = priceConverter.convertEntityToDto(priceEntity);
+        PriceResponseDto priceResponseDto = priceMapper.convertEntityToResponseDto(priceEntity);
 
-        return Optional.of(priceDto);
+        return Optional.of(priceResponseDto);
     }
 
 }

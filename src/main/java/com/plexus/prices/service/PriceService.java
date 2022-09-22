@@ -1,6 +1,6 @@
 package com.plexus.prices.service;
 
-import com.plexus.prices.models.dto.PriceDto;
+import com.plexus.prices.models.dto.PriceResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -18,5 +18,5 @@ public interface PriceService {
      * @param brandId
      * @return
      */
-    Optional<PriceDto> getPrice(LocalDateTime date, Integer productId, Integer brandId);
+    Optional<PriceResponseDto> getPrice(LocalDateTime date, Integer productId, Integer brandId);
 }

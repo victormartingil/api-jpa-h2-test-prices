@@ -1,4 +1,4 @@
-package com.plexus.prices.models.dao;
+package com.plexus.prices.models.repository;
 
 import com.plexus.prices.models.entity.PriceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author victor.martingil
  */
-public interface PriceDao extends JpaRepository<PriceEntity, Long> {
+public interface PriceRepository extends JpaRepository<PriceEntity, Long> {
 
     /**
      *

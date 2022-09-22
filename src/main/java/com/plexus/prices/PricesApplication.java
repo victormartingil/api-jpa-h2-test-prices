@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author victor.martingil
  */
 @SpringBootApplication
-//@EnableSwagger2
 public class PricesApplication {
 
     public static void main(String[] args) {

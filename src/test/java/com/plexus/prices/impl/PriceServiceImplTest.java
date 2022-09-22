@@ -1,16 +1,15 @@
 package com.plexus.prices.impl;
 
-import com.plexus.prices.converter.PriceConverter;
-import com.plexus.prices.models.dao.PriceDao;
-import com.plexus.prices.models.dto.PriceDto;
+import com.plexus.prices.mapper.PriceMapper;
+import com.plexus.prices.models.dto.PriceResponseDto;
 import com.plexus.prices.models.entity.PriceEntity;
+import com.plexus.prices.models.repository.PriceRepository;
 import com.plexus.prices.service.impl.PriceServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,10 +26,10 @@ import static org.mockito.Mockito.*;
 class PriceServiceImplTest {
 
     @Mock
-    PriceDao priceDao;
+    PriceRepository priceRepository;
 
     @Mock
-    PriceConverter priceConverter;
+    PriceMapper priceMapper;
 
     @InjectMocks
     PriceServiceImpl service;
@@ -52,16 +51,16 @@ class PriceServiceImplTest {
         PriceEntity priceEntity = new PriceEntity(id, brandId, startDate, endDate, priceList, productId, priority, price, curr);
         List<PriceEntity> priceEntityList = new ArrayList<>();
         priceEntityList.add(priceEntity);
-        PriceDto priceDto = new PriceDto(id, productId, brandId, priceList, startDate, endDate, price);
+        PriceResponseDto priceResponseDto = new PriceResponseDto(id, productId, brandId, priceList, startDate, endDate, price);
 
         //when
-        when(priceConverter.convertEntityToDto(priceEntity)).thenReturn(priceDto);
-        when(priceDao.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate)).thenReturn(priceEntityList);
+        when(priceMapper.convertEntityToResponseDto(priceEntity)).thenReturn(priceResponseDto);
+        when(priceRepository.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate)).thenReturn(priceEntityList);
 
-        Optional<PriceDto> priceDtoOptional = service.getPrice(queryDate, productId, brandId);
+        Optional<PriceResponseDto> priceDtoOptional = service.getPrice(queryDate, productId, brandId);
 
         //then
-        verify(priceDao, times(1)).findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
+        verify(priceRepository, times(1)).findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
         assertTrue(priceDtoOptional.isPresent());
         assertEquals(priceDtoOptional.get().getPrice(), price);
     }
@@ -83,19 +82,19 @@ class PriceServiceImplTest {
         PriceEntity priceEntity = new PriceEntity(id, brandId, startDate, endDate, priceList, productId, priority, price, curr);
         List<PriceEntity> priceEntityList = new ArrayList<>();
         priceEntityList.add(priceEntity);
-        PriceDto priceDto = new PriceDto(id, productId, brandId, priceList, startDate, endDate, price);
+        PriceResponseDto priceResponseDto = new PriceResponseDto(id, productId, brandId, priceList, startDate, endDate, price);
 
-        given(priceConverter.convertEntityToDto(priceEntity)).willReturn(priceDto);
-        given(priceDao.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate)).willReturn(priceEntityList);
+        given(priceMapper.convertEntityToResponseDto(priceEntity)).willReturn(priceResponseDto);
+        given(priceRepository.findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate)).willReturn(priceEntityList);
 
         //when
-        Optional<PriceDto> priceDtoOptional = service.getPrice(queryDate, productId, brandId);
+        Optional<PriceResponseDto> priceDtoOptional = service.getPrice(queryDate, productId, brandId);
 
         //then
         assertTrue(priceDtoOptional.isPresent());
         assertEquals(priceDtoOptional.get().getPrice(), price);
-        then(priceDao).should(times(1)).findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
-        then(priceDao).shouldHaveNoMoreInteractions();
+        then(priceRepository).should(times(1)).findAllByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThan(productId, brandId, queryDate, queryDate);
+        then(priceRepository).shouldHaveNoMoreInteractions();
     }
 
 }

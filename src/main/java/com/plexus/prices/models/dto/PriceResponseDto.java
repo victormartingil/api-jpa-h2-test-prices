@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Schema(description = "This is the price that the API will return")
-public class PriceDto {
+public class PriceResponseDto {
 
     private Long id;
     private int productId;

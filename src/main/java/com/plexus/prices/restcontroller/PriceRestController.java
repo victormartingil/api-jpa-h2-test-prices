@@ -1,7 +1,7 @@
 package com.plexus.prices.restcontroller;
 
 
-import com.plexus.prices.models.dto.PriceDto;
+import com.plexus.prices.models.dto.PriceResponseDto;
 import com.plexus.prices.service.impl.PriceServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,24 +41,24 @@ public class PriceRestController {
     }
 
     @Operation(summary = "This return the Price according to request params", responses = {
-            @ApiResponse(description = "Successful Operation", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PriceDto.class))),
+            @ApiResponse(description = "Successful Operation", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PriceResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
             @ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
     @GetMapping(produces = "application/json")
-    public ResponseEntity<PriceDto> getPrice(@Parameter(description = "The date for the price") @RequestParam String date,
-                                             @Parameter(description = "The product Id for the price") @RequestParam int productId,
-                                             @Parameter(description = "The brand Id for the price") @RequestParam int brandId) {
+    public ResponseEntity<PriceResponseDto> getPrice(@Parameter(description = "The date for the price") @RequestParam String date,
+                                                     @Parameter(description = "The product Id for the price") @RequestParam int productId,
+                                                     @Parameter(description = "The brand Id for the price") @RequestParam int brandId) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
         log.info("Getting price with start date: {}, product Id:{}, brand Id:{}.", localDateTime, productId, brandId);
 
-        Optional<PriceDto> priceDto = priceService.getPrice(localDateTime, productId, brandId);
+        Optional<PriceResponseDto> priceResponseDto = priceService.getPrice(localDateTime, productId, brandId);
 
-        if (priceDto.isEmpty()) {
+        if (priceResponseDto.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(priceDto.get());
+            return ResponseEntity.status(HttpStatus.OK).body(priceResponseDto.get());
         }
 
     }

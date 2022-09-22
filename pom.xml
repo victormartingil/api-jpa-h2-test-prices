@@ -49,6 +49,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- MAP STRUCT-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.2.Final</version>
+        </dependency>
+
         <!--ACTUATOR-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
