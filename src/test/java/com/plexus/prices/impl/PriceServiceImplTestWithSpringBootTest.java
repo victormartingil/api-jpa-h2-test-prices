@@ -1,6 +1,5 @@
 package com.plexus.prices.impl;
 
-import com.plexus.prices.mapper.PriceMapper;
 import com.plexus.prices.models.dto.PriceResponseDto;
 import com.plexus.prices.models.entity.PriceEntity;
 import com.plexus.prices.service.impl.PriceServiceImpl;
@@ -49,7 +48,7 @@ class PriceServiceImplTestWithSpringBootTest {
         assertEquals(priceDtoOptional.get().getPrice(), price);
     }
 
-    //    @Test
+    @Test
     void getPriceBDDStyle() {
         //given
         Long id = 1L;
