@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @author victor.martingil
  **/
-
 @Mapper(componentModel = "spring")
 public interface PriceMapper {
 
