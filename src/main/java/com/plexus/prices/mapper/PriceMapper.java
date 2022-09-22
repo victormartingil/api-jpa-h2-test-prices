@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author victor.martingil
  **/
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PriceMapper {
 
     PriceResponseDto convertEntityToResponseDto(PriceEntity priceEntity);
